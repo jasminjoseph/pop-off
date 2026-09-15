@@ -1,0 +1,11 @@
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/.env*.local
+
+# Go
+api/tmp/
+
+# General
+.DS_Store
+*.log
