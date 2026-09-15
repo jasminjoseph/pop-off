@@ -25,6 +25,11 @@ PostgreSQL
 React
 REST API
 
+### Deployment
+Render
+Supabase
+Vercel
+
 ## Planning 
 ### Phase 1
 -	Backend – Go + PostgreSql

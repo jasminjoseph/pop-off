@@ -133,7 +133,11 @@ func main() {
 
 	// Connect to database - activity
 	ctx := context.Background()
-	connStr := "postgres://pop:popoff@localhost:5432/activity"
+	connStr := os.Getenv("DATABASE_URL")
+	if connStr == "" {
+		connStr = "postgres://pop:popoff@localhost:5432/activity"
+	}
+
 	var err error
 	dbPool, err = pool.New(ctx, connStr)
 	if err != nil {
@@ -161,5 +165,10 @@ func main() {
 	r.GET("/api/people", getAllPeople)
 	r.POST("/api/workouts", addPersonWorkouts)
 
-	r.Run(":8090")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8090"
+	}
+
+	r.Run(":" + port)
 }
