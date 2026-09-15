@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4ebd9;
+  --foreground: #2b2620;
+  --color-line: #ddd0b4;
+  --color-heart: #c4462b;
+  --color-calories: #b8860b;
+  --color-duration: #1f5673;
+  --color-accent: #966b9d;
 }
 
 @theme inline {
@@ -14,11 +19,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #ffffff;
-    --foreground: #171717;
+    --background: #f4ebd9;
+    --foreground: #2b2620;
   }
 }
-
 
 ul {
   padding-inline-start: 20px;
@@ -27,7 +31,7 @@ ul {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
 * {
@@ -49,34 +53,164 @@ body {
   width: 34px;
 }
 
-.form-input {
-	display: block;
-	width: 100%;
-	max-width: 280px;
-	padding: 8px 10px;
-	margin: 4px 0 12px;
-	border: 1px solid #94a3b8;
-	border-radius: 6px;
-	font-size: 14px;
+/* ---- Dashboard layout ---- */
+
+.dashboard-shell {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.dashboard-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.dashboard-favicon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.dashboard-heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+
+.dashboard-subhead {
+  font-size: 0.875rem;
+  color: #966B9D;
+  margin-bottom: 2rem;
+}
+
+.user-roster {
+  font-size: 0.875rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.workout-block {
+  border-bottom: 1px solid var(--color-line);
+  padding: 1.5rem 0;
+}
+
+.workout-block:first-of-type {
+  padding-top: 0;
+}
+
+.workout-block-user {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-family: var(--font-mono), monospace;
+}
+
+.stat-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-table-header {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  font-size: 0.75rem;
+  color: #966B9D;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-line);
+  margin-bottom: 0.5rem;
+}
+
+.stat-table-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.stat-value {
+  font-family: var(--font-mono), monospace;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.stat-value--heart {
+  color: var(--color-heart);
+}
+.stat-value--calories {
+  color: var(--color-calories);
+}
+.stat-value--duration {
+  color: var(--color-duration);
+}
+
+/* ---- Form ---- */
+
+.form-section {
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--color-line);
+}
+
+.form-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.form-field {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .form-label {
-	font-weight: 600;
-	font-size: 13px;
-	color: #334155;
+  width: 8rem;
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4a4436;
+  white-space: nowrap;
+}
+
+.form-input {
+  flex: 1;
+  max-width: 280px;
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: var(--font-mono), monospace;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--color-accent);
 }
 
 .form-button {
-	padding: 10px 20px;
-	background-color: #2563eb;
-	color: #fff;
-	border: none;
-	border-radius: 6px;
-	font-weight: 600;
-	cursor: pointer;
+  padding: 10px 20px;
+  background-color: var(--color-accent);
+  color: var(--background);
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-button:hover:not(:disabled) {
+  opacity: 0.9;
 }
 
 .form-button:disabled {
-	background-color: #94a3b8;
-	cursor: not-allowed;
+  background-color: #b6a8b8;
+  color: #fff;
+  opacity: 1;
+  cursor: not-allowed;
 }

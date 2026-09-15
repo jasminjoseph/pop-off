@@ -138,20 +138,20 @@ function WorkoutForm({ onWorkoutAdded }) {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<div>
+			<div className="form-field">
 				<label htmlFor="personId" className="form-label">Person ID</label>
 				<input id="personId" className="form-input" type="text" value={personId} onChange={(e) => setPersonId(e.target.value)} required />
 			</div>
-			<div>
+			<div className="form-field">
 				<label htmlFor="heartRate" className="form-label">Heart Rate</label>
 				<input id="heartRate" className="form-input" type="number" value={heartRate} onChange={(e) => setHeartRate(e.target.value)} required />
 			</div>
-			<div>
+			<div className="form-field">
 				<label htmlFor="calories" className="form-label">Calories</label>
 				<input id="calories" className="form-input" type="number" value={calories} onChange={(e) => setCalories(e.target.value)} required />
 			</div>
-			<div>
-				<label htmlFor="duration">Duration</label>
+			<div className="form-field">
+				<label htmlFor="duration" className="form-label">Duration</label>
 				<input id="duration" className="form-input" type="number" value={duration} onChange={(e) => setDuration(e.target.value)} required />
 			</div>
 			<button type="submit" className="form-button" disabled={submitting}>
@@ -176,21 +176,41 @@ export default function Dashboard() {
 	if (erroruser || error) return <p>API fetch failed !! ....</p>;
 
 	return (
-		<div>
-		<div>Users: {users.join(", ")}</div>
+		<div className="dashboard-shell">
+		<div className="dashboard-title-row">
+		    <img src="/favicon.ico" alt="" className="dashboard-favicon" />
+		    <h1 className="dashboard-heading"> pop off </h1>
+		</div>
+		<p className="dashboard-subhead"> workout stats </p>
 
-		{data && Object.entries(data).map(([user, workouts]) => (
-			<div key={user}> 
-			<h3>{user}</h3>
-			    {workouts.map((w) => (
-			        <div key={w.ID}>
-			        	<div>HR {w.HeartRate}, Calories: {w.Calories}, Duration {w.Duration} </div>
-			        </div>
-			    ))}
+		<div className="user-roster">
+			Tracking {users.length} users: {users.join(", ")}
+		</div>
+
+		{data &&
+	Object.entries(data).map(([user, workouts]) => (
+		<div key={user} className="workout-block">
+			<div className="workout-block-user">{user}</div>
+
+			<div className="stat-table">
+				<div className="stat-table-header">
+					<span>heart rate</span>
+					<span>calories</span>
+					<span>duration</span>
+				</div>
+
+				{workouts.map((w) => (
+					<div key={w.ID} className="stat-table-row">
+						<span className="stat-value stat-value--heart">{w.HeartRate}bpm</span>
+						<span className="stat-value stat-value--calories">{w.Calories}kcal</span>
+						<span className="stat-value stat-value--duration">{w.Duration}min</span>
+					</div>
+				))}
 			</div>
-		))
-		};
-		<h3>Add Workout</h3>
+		</div>
+	))}
+		<h2 className="dashboard-heading">Add Workout</h2>
+		<p className="dashboard-subhead"> workout stats </p>
 		<div>
 		<WorkoutForm onWorkoutAdded={refetch} />
 		</div>
