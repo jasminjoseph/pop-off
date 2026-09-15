@@ -187,28 +187,31 @@ export default function Dashboard() {
 			Tracking {users.length} users: {users.join(", ")}
 		</div>
 
-		{data &&
-	Object.entries(data).map(([user, workouts]) => (
-		<div key={user} className="workout-block">
-			<div className="workout-block-user">{user}</div>
+		{data && (
+	<div className="user-grid">
+		{Object.entries(data).map(([user, workouts]) => (
+			<div key={user} className="workout-block">
+				<div className="workout-block-user">{user}</div>
 
-			<div className="stat-table">
-				<div className="stat-table-header">
-					<span>heart rate</span>
-					<span>calories</span>
-					<span>duration</span>
-				</div>
-
-				{workouts.map((w) => (
-					<div key={w.ID} className="stat-table-row">
-						<span className="stat-value stat-value--heart">{w.HeartRate}bpm</span>
-						<span className="stat-value stat-value--calories">{w.Calories}kcal</span>
-						<span className="stat-value stat-value--duration">{w.Duration}min</span>
+				<div className="stat-table">
+					<div className="stat-table-header">
+						<span>heart rate</span>
+						<span>calories</span>
+						<span>duration</span>
 					</div>
-				))}
+
+					{workouts.map((w) => (
+						<div key={w.ID} className="stat-table-row">
+							<span className="stat-value stat-value--heart">{w.HeartRate}bpm</span>
+							<span className="stat-value stat-value--calories">{w.Calories}kcal</span>
+							<span className="stat-value stat-value--duration">{w.Duration}min</span>
+						</div>
+					))}
+				</div>
 			</div>
-		</div>
-	))}
+		))}
+	</div>
+)}
 		<h2 className="dashboard-heading">Add Workout</h2>
 		<p className="dashboard-subhead"> workout stats </p>
 		<div>

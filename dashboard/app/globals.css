@@ -56,9 +56,9 @@ body {
 /* ---- Dashboard layout ---- */
 
 .dashboard-shell {
-  max-width: 48rem;
+  max-width: 80rem;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem;
+  padding: 2.5rem 2rem;
 }
 
 .dashboard-title-row {
@@ -90,16 +90,13 @@ body {
   font-size: 0.875rem;
   margin-bottom: 2.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--color-line);
 }
 
-.workout-block {
-  border-bottom: 1px solid var(--color-line);
-  padding: 1.5rem 0;
-}
-
-.workout-block:first-of-type {
-  padding-top: 0;
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+  align-items: start;
 }
 
 .workout-block-user {
@@ -107,6 +104,17 @@ body {
   font-weight: 600;
   margin-bottom: 1rem;
   font-family: var(--font-mono), monospace;
+  min-height: 1.5rem; /* keeps username line height consistent even if font renders slightly differently */
+}
+
+.workout-block {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.workout-block:nth-child(-n+2) {
+  border-top: none;
+  padding-top: 0;
 }
 
 .stat-table {
@@ -151,7 +159,7 @@ body {
 /* ---- Form ---- */
 
 .form-section {
-  margin-top: 3rem;
+  margin-top: 7rem;
   padding-top: 2.5rem;
   border-top: 1px solid var(--color-line);
 }
