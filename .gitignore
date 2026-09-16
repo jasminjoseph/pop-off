@@ -1,7 +1,7 @@
 # Node / Next.js
-frontend/node_modules/
-frontend/.next/
-frontend/.env*.local
+dashboard/node_modules/
+dashboard/.next/
+dashboard/.env*.local
 
 # Go
 api/tmp/
