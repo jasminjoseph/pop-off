@@ -154,7 +154,8 @@ func main() {
 	// Not the same host (protocol + host + port) led to cross-origin error CORS 
 	// TODO: Add nginx to avoid this. Both server and dashboard behind nignx
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"}, // your Next.js dev URL
+		AllowOrigins:     []string{"https://pop-off-phi.vercel.app",
+		                           "http://localhost:3000"}, // your Next.js dev URL
 		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
 		AllowHeaders:     []string{"Content-Type"},
 		AllowCredentials: true,
