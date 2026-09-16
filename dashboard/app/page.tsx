@@ -1,8 +1,25 @@
 "use client";
 import {useEffect, useState} from "react";
 
-function useUserData(getUserApi) {
-	const [users, setUsers] = useState(null);
+// ---- Config ----
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8090";
+
+// ---- Types ----
+interface Workout {
+	ID: number;
+	PersonID: string;
+	HeartRate: number;
+	Calories: number;
+	Duration: number;
+	Timestamp: string;
+}
+
+interface WorkoutsByUser {
+	[user: string]: Workout[];
+}
+
+function useUserData(getUserApi: string) {
+	const [users, setUsers] = useState<string[] | null>(null);
 	const [erroruser, setErroruser] = useState(null);
 	const [loadinguser, setLoadinguser] = useState(true);
 
@@ -34,8 +51,8 @@ function useUserData(getUserApi) {
 
 }
 
-function usePopOffData(users, getDataApi) {
-	const [data, setData] = useState(null);
+function usePopOffData(users: string[] | null, getDataApi: string) {
+	const [data, setData] = useState<WorkoutsByUser | null>(null);
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(true);
 
@@ -53,11 +70,11 @@ function usePopOffData(users, getDataApi) {
 	                  	if (!res.ok) throw new Error(`Request Failed ${res.status}`);
 	                  	return res.json();
 	            	})
-	            	.then((workouts) => ({user, workouts}))
+	            	.then((workouts: Workout[]) => ({user, workouts}))
 	        ))
 	        
 	            .then((result) => {
-	            	const combined = {};
+	            	const combined: WorkoutsByUser = {};
 	            	result.forEach(({user, workouts}) => {
 	            		combined[user] = workouts;
 	            	});
@@ -82,12 +99,19 @@ function usePopOffData(users, getDataApi) {
 
 }
 
-function useAddWorkout(postApi) {
+interface NewWorkout {
+	PersonID: string;
+	HeartRate: number;
+	Calories: number;
+	Duration: number;
+}
+
+function useAddWorkout(postApi: string) {
 	const [submitting, setSubmitting] = useState(false);
 	const [error, setError] = useState(null);
 	const [success, setSuccess] = useState(false);
 
-	function addWorkout(workout) {
+	function addWorkout(workout: NewWorkout) {
 		setSubmitting(true);
 		setError(null);
 		setSuccess(false);
@@ -108,8 +132,12 @@ function useAddWorkout(postApi) {
 	return { addWorkout, submitting, error, success };
 }
 
-function WorkoutForm({ onWorkoutAdded }) {
-	const postApi = "http://localhost:8090/api/workouts";
+interface WorkoutFormProps {
+	onWorkoutAdded?: () => void;
+}
+
+function WorkoutForm({ onWorkoutAdded }: WorkoutFormProps) {
+	const postApi = `${API_BASE_URL}/api/workouts`;
 	const { addWorkout, submitting, error, success } = useAddWorkout(postApi);
 
 	const [personId, setPersonId] = useState("");
@@ -117,7 +145,7 @@ function WorkoutForm({ onWorkoutAdded }) {
 	const [calories, setCalories] = useState("");
 	const [duration, setDuration] = useState("");
 
-	function handleSubmit(e) {
+	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 
 		const workout = {
@@ -165,11 +193,11 @@ function WorkoutForm({ onWorkoutAdded }) {
 
 export default function Dashboard() {
 	// Get all user names
-	const getUserApi = "http://localhost:8090/api/people";
+	const getUserApi = `${API_BASE_URL}/api/people`;
 	const {users, erroruser, loadinguser} = useUserData(getUserApi)
 
 	// Get all data for users
-	const userDataApi = "http://localhost:8090/api/workouts"
+	const userDataApi = `${API_BASE_URL}/api/workouts`
 	const {data, error, loading, refetch} = usePopOffData(users, userDataApi)
 
 	if (loadinguser || loading) return <p>Loading !! ....</p>;
@@ -184,7 +212,7 @@ export default function Dashboard() {
 		<p className="dashboard-subhead"> workout stats </p>
 
 		<div className="user-roster">
-			Tracking {users.length} users: {users.join(", ")}
+			Tracking {users?.length ?? 0} users: {users?.join(", ")}
 		</div>
 
 		{data && (
@@ -200,7 +228,7 @@ export default function Dashboard() {
 						<span>duration</span>
 					</div>
 
-					{workouts.map((w) => (
+					{workouts.map((w: Workout) => (
 						<div key={w.ID} className="stat-table-row">
 							<span className="stat-value stat-value--heart">{w.HeartRate}bpm</span>
 							<span className="stat-value stat-value--calories">{w.Calories}kcal</span>
