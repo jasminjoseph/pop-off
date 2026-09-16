@@ -18,6 +18,11 @@ interface WorkoutsByUser {
 	[user: string]: Workout[];
 }
 
+function formatWorkoutDate(timestamp: string): string {
+	const date = new Date(timestamp);
+	return date.toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase();
+}
+
 function useUserData(getUserApi: string) {
 	const [users, setUsers] = useState<string[] | null>(null);
 	const [erroruser, setErroruser] = useState(null);
@@ -166,27 +171,39 @@ function WorkoutForm({ onWorkoutAdded }: WorkoutFormProps) {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<div className="form-field">
-				<label htmlFor="personId" className="form-label">Person ID</label>
-				<input id="personId" className="form-input" type="text" value={personId} onChange={(e) => setPersonId(e.target.value)} required />
-			</div>
-			<div className="form-field">
-				<label htmlFor="heartRate" className="form-label">Heart Rate</label>
-				<input id="heartRate" className="form-input" type="number" value={heartRate} onChange={(e) => setHeartRate(e.target.value)} required />
-			</div>
-			<div className="form-field">
-				<label htmlFor="calories" className="form-label">Calories</label>
-				<input id="calories" className="form-input" type="number" value={calories} onChange={(e) => setCalories(e.target.value)} required />
-			</div>
-			<div className="form-field">
-				<label htmlFor="duration" className="form-label">Duration</label>
-				<input id="duration" className="form-input" type="number" value={duration} onChange={(e) => setDuration(e.target.value)} required />
-			</div>
-			<button type="submit" className="form-button" disabled={submitting}>
-				{submitting ? "Submitting..." : "Add Workout"}
-			</button>
-			{error && <p>Error: {error}</p>}
-			{success && <p>Workout added!</p>}
+		<div className="form-card">
+	<span className="form-eyebrow">NEW ENTRY</span>
+	<h3 className="form-heading">Log a session</h3>
+
+	<div className="form-grid">
+		<div className="form-field">
+			<label htmlFor="personId" className="form-label">Person ID</label>
+			<input id="personId" className="form-input" type="text" value={personId} onChange={(e) => setPersonId(e.target.value)} required />
+		</div>
+
+		<div className="form-field">
+			<label htmlFor="heartRate" className="form-label">Heart Rate (bpm)</label>
+			<input id="heartRate" className="form-input" type="number" value={heartRate} onChange={(e) => setHeartRate(e.target.value)} required />
+		</div>
+
+		<div className="form-field">
+			<label htmlFor="calories" className="form-label">Calories (kcal)</label>
+			<input id="calories" className="form-input" type="number" value={calories} onChange={(e) => setCalories(e.target.value)} required />
+		</div>
+
+		<div className="form-field">
+			<label htmlFor="duration" className="form-label">Duration (min)</label>
+			<input id="duration" className="form-input" type="number" value={duration} onChange={(e) => setDuration(e.target.value)} required />
+		</div>
+	</div>
+
+	<button type="submit" className="form-button" disabled={submitting}>
+		{submitting ? "Submitting..." : "+ Add Workout"}
+	</button>
+
+	{error && <p className="form-error">Error: {error}</p>}
+	{success && <p className="form-success">Workout added!</p>}
+	</div>
 		</form>
 	);
 }
@@ -221,29 +238,47 @@ export default function Dashboard() {
 			<div key={user} className="workout-block">
 				<div className="workout-block-user">{user}</div>
 
-				<div className="stat-table">
-					<div className="stat-table-header">
-						<span>heart rate</span>
-						<span>calories</span>
-						<span>duration</span>
-					</div>
+				
+				
 
-					{workouts.map((w: Workout) => (
-						<div key={w.ID} className="stat-table-row">
-							<span className="stat-value stat-value--heart">{w.HeartRate}bpm</span>
-							<span className="stat-value stat-value--calories">{w.Calories}kcal</span>
-							<span className="stat-value stat-value--duration">{w.Duration}min</span>
-						</div>
-					))}
-				</div>
+                         <div className="workout-entries">
+                         	{workouts.map((w: Workout) => (
+                         		<div key={w.ID} className="workout-entry">
+                         			<div className="workout-entry-date">{formatWorkoutDate(w.Timestamp)}</div>
+                         
+                         			<div className="stat-row-v2">
+                         				<div className="stat-item">
+                         					<span className="stat-item-label">HR</span>
+                         					<span className="stat-value stat-value--heart">
+                         						{w.HeartRate}<span className="stat-unit">bpm</span>
+                         					</span>
+                         				</div>
+                         
+                         				<div className="stat-item">
+                         					<span className="stat-item-label">CAL</span>
+                         					<span className="stat-value stat-value--calories">
+                         						{w.Calories}<span className="stat-unit">kcal</span>
+                         					</span>
+                         				</div>
+                         
+                         				<div className="stat-item">
+                         					<span className="stat-item-label">TIME</span>
+                         					<span className="stat-value stat-value--duration">
+                         						{w.Duration}<span className="stat-unit">min</span>
+                         					</span>
+                         				</div>
+                         			</div>
+                         		</div>
+                         	))}
+                         </div>
+
+
 			</div>
 		))}
 	</div>
 )}
-		<h2 className="dashboard-heading">Add Workout</h2>
-		<p className="dashboard-subhead"> workout stats </p>
-		<div>
-		<WorkoutForm onWorkoutAdded={refetch} />
+		<div className="form-section">
+		    <WorkoutForm onWorkoutAdded={refetch} />
 		</div>
 		</div>
 
